@@ -62,7 +62,7 @@ cd InternshipSearcher
 npm run setup
 ```
 
-`setup` asks for a password, builds the app, and registers it as a background service: a LaunchAgent on macOS, a systemd user service on Linux, or a logon task on Windows. From then on it starts by itself whenever you log in and keeps scanning in the background, so **http://localhost:3000** always works. Bookmark it and refresh whenever you like. It's only reachable from your own computer, and nothing is hosted anywhere.
+`setup` asks for a password, builds the app, and registers it to run in the background: a LaunchAgent on macOS, a systemd user service on Linux, or a hidden launcher in the Startup folder on Windows (no admin rights needed). From then on it starts by itself whenever you log in and keeps scanning in the background, so **http://localhost:3000** always works. Bookmark it and refresh whenever you like. It's only reachable from your own computer, and nothing is hosted anywhere.
 
 | Command | What it does |
 | --- | --- |
