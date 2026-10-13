@@ -1,0 +1,41 @@
+:root {
+  --navy-900: #121a38;
+  --navy-800: #1b2752;
+  --navy-700: #26346a;
+  --navy-500: #4a5a9c;
+  --navy-300: #a9b2d8;
+  --navy-100: #e6e9f6;
+
+  --pink-600: #e84d84;
+  --pink-500: #ff6c9f;
+  --pink-400: #ff8fb6;
+  --pink-300: #ffb3cd;
+  --pink-200: #ffd3e2;
+  --pink-100: #ffe7ef;
+  --pink-50: #fff4f8;
+
+  --rose-300: #e9b4c2;
+  --lavender-500: #9d8fe6;
+  --lavender-400: #c3baf5;
+  --lavender-100: #efecff;
+  --butter-400: #ffd66b;
+  --butter-100: #fff4cf;
+  --mint-300: #a8e3c8;
+  --cream: #fffaf7;
+  --white: #ffffff;
+
+  --text: var(--navy-800);
+  --text-soft: #5d6690;
+  --border: #f3d3df;
+
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+
+  --shadow-sm: 0 1px 2px rgba(27, 39, 82, 0.06), 0 2px 8px rgba(255, 108, 159, 0.06);
+  --shadow: 0 6px 24px rgba(27, 39, 82, 0.08), 0 2px 6px rgba(255, 108, 159, 0.08);
+  --shadow-lg: 0 24px 60px rgba(27, 39, 82, 0.18);
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+}
