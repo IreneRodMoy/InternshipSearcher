@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { rootDir } from './env.js';
 
 const env = process.env;
 const isProduction = env.NODE_ENV === 'production';
@@ -13,7 +14,8 @@ function required(name: string, devFallback: string): string {
 export const config = {
   isProduction,
   port: Number(env.PORT ?? 3000),
-  dataDir: path.resolve(env.DATA_DIR ?? './data'),
+  host: env.HOST ?? '127.0.0.1',
+  dataDir: path.resolve(rootDir, env.DATA_DIR ?? 'data'),
   password: required('APP_PASSWORD', 'dev'),
   sessionSecret: required('SESSION_SECRET', 'dev-secret-change-me'),
   linkedinEnabled: env.LINKEDIN_ENABLED !== 'false',

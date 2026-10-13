@@ -2,7 +2,7 @@
 
 A personal internship radar. It watches job boards, GitHub internship lists and company career pages around the clock, keeps only the postings that fit what I'm looking for, and gives me a small kanban board to track every application.
 
-Right now it's tuned for **Summer 2027 tech internships in Montréal** (4-month terms, open to undergrads), but the term, locations and filters are all editable from the settings panel.
+It runs on my own laptop in the background. Right now it's tuned for **Summer 2027 tech internships in Montréal** (4-month terms, open to undergrads), but the term, locations and filters are all editable from the settings panel.
 
 ## Features
 
@@ -52,31 +52,37 @@ client/src
 └── styles/
 ```
 
-## Running locally
+## Running it on your computer
+
+You need [Node.js](https://nodejs.org) 20.12 or newer. Then, once:
 
 ```bash
-cp .env.example .env    # set APP_PASSWORD and SESSION_SECRET
-npm install
-npm run dev             # API on :3000, app on http://localhost:5173
+git clone https://github.com/IreneRodMoy/InternshipSearcher.git
+cd InternshipSearcher
+npm run setup
 ```
 
+`setup` asks for a password, builds the app, and registers it as a background service: a LaunchAgent on macOS, a systemd user service on Linux, or a logon task on Windows. From then on it starts by itself whenever you log in and keeps scanning in the background, so **http://localhost:3000** always works. Bookmark it and refresh whenever you like. It's only reachable from your own computer, and nothing is hosted anywhere.
+
+| Command | What it does |
+| --- | --- |
+| `npm run setup` | install or update (run it again after `git pull`) |
+| `npm run restart` | restart the background service |
+| `npm run uninstall` | stop it from starting automatically (your data stays in `data/`) |
+
+Scans pause while the computer is asleep or off, and catch up as soon as it wakes up.
+
+### Developing
+
 ```bash
+npm run dev             # API on :3000 with hot reload, app on http://localhost:5173
 npm test                # unit + pipeline tests
 npm run typecheck
 ```
 
-## Deploying
+Stop the background service first (`npm run uninstall`) so both don't fight over port 3000.
 
-The app needs a server that is always on (for the scheduler) and a persistent disk (for SQLite). [Fly.io](https://fly.io) works well, and `fly.toml` already targets the Montréal region:
-
-```bash
-fly launch --no-deploy --copy-config
-fly volumes create internship_data --region yul --size 1
-fly secrets set APP_PASSWORD='something-long' SESSION_SECRET="$(openssl rand -hex 32)"
-fly deploy
-```
-
-Any Docker host with a volume mounted at `/data` works too (Railway, Render with a disk, a VPS…).
+A `Dockerfile` is included if you ever want to host it somewhere instead.
 
 ### Environment variables
 
@@ -84,7 +90,8 @@ Any Docker host with a volume mounted at `/data` works too (Railway, Render with
 | --- | --- | --- |
 | `APP_PASSWORD` | yes | password for the login screen |
 | `SESSION_SECRET` | yes | random string used to sign sessions |
-| `DATA_DIR` | | where the SQLite database lives (default `./data`) |
+| `PORT` | | port for the site (default `3000`) |
+| `DATA_DIR` | | where the SQLite database lives (default `data/`) |
 | `LINKEDIN_ENABLED` | | set to `false` to skip LinkedIn |
 | `JSEARCH_API_KEY` | | enables the JSearch source (Indeed, Glassdoor, …) |
 | `ADZUNA_APP_ID`, `ADZUNA_APP_KEY` | | enables the Adzuna source |

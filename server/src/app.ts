@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import compression from 'compression';
 import express from 'express';
 import helmet from 'helmet';
+import { rootDir } from './env.js';
 import { api } from './routes/index.js';
 
-const clientDist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client/dist');
+const clientDist = path.join(rootDir, 'client/dist');
 
 export function createApp() {
   const app = express();
