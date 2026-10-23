@@ -49,6 +49,7 @@ export interface Preferences {
   blockedKeywords: string[];
   blockedCompanies: string[];
   ghostAfterDays: number;
+  desktopNotifications: boolean;
 }
 
 export interface SourceStatus {

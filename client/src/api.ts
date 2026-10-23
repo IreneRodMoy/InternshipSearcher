@@ -41,4 +41,5 @@ export const api = {
 
   sources: () => call<SourceStatus[]>('/sources'),
   scan: () => call('/scan', { method: 'POST' }),
+  testNotification: () => call<{ ok: boolean }>('/notifications/test', { method: 'POST' }),
 };

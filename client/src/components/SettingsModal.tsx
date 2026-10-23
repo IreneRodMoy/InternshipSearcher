@@ -95,6 +95,14 @@ export function SettingsModal({ prefs, sources, now, onSaved, onClose }: Setting
             />
             <span>Hide postings that don't explicitly mention {draft.season.toLowerCase()} {draft.year}</span>
           </label>
+          <label className="toggle">
+            <input
+              type="checkbox"
+              checked={draft.desktopNotifications}
+              onChange={(event) => set('desktopNotifications', event.target.checked)}
+            />
+            <span>Show a desktop notification when a new internship is found, even if the site is closed</span>
+          </label>
         </fieldset>
 
         <fieldset>

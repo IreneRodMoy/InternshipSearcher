@@ -30,6 +30,7 @@ function parsePreferences(body: Record<string, unknown>, current: Preferences): 
     blockedKeywords: list(body.blockedKeywords),
     blockedCompanies: list(body.blockedCompanies),
     ghostAfterDays: between(body.ghostAfterDays, 7, 120, current.ghostAfterDays),
+    desktopNotifications: typeof body.desktopNotifications === 'boolean' ? body.desktopNotifications : current.desktopNotifications,
   };
 }
 

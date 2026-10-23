@@ -48,7 +48,7 @@ export function Header(props: HeaderProps) {
         <button
           className={`icon-button${props.notificationsOn ? ' is-on' : ''}`}
           onClick={props.onNotifications}
-          title={props.notificationsOn ? 'Desktop alerts are on' : 'Turn on desktop alerts'}
+          title={props.notificationsOn ? 'Desktop notifications are on (click to send a test)' : 'Turn on desktop notifications'}
           aria-label="Desktop alerts"
         >
           <Icon name="bell" />

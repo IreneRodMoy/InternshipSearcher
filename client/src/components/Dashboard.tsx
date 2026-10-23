@@ -37,7 +37,6 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [openJobId, setOpenJobId] = useState<string | null>(null);
   const [dragged, setDragged] = useState<Job | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [notificationsOn, setNotificationsOn] = useState(() => 'Notification' in window && Notification.permission === 'granted');
   const unread = useRef(0);
   const toastId = useRef(0);
 
@@ -56,16 +55,8 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
         unread.current += jobs.length;
         document.title = `(${unread.current}) InternshipSearcher`;
       }
-      if (notificationsOn) {
-        const notification = new Notification(jobs.length === 1 ? `New internship at ${first.company}` : `${jobs.length} new internships`, {
-          body: jobs.slice(0, 3).map((j) => `${j.title} · ${j.company}`).join('\n'),
-          icon: '/favicon.svg',
-          tag: 'new-jobs',
-        });
-        notification.onclick = () => window.focus();
-      }
     },
-    [toast, notificationsOn],
+    [toast],
   );
 
   const { fresh, board, all, loading, error, update, upsert } = useJobs({ onUnauthorized: onLogout, onNewJobs });
@@ -121,12 +112,14 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
     if (job && event.over) move(job, event.over.id as Status);
   };
 
-  const enableNotifications = async () => {
-    if (!('Notification' in window)) return toast('This browser does not support desktop alerts');
-    if (notificationsOn) return toast('Desktop alerts are on. Turn them off from your browser settings.');
-    const permission = await Notification.requestPermission();
-    setNotificationsOn(permission === 'granted');
-    toast(permission === 'granted' ? "Desktop alerts on! I'll ping you when something new shows up" : 'Alerts were blocked by the browser');
+  const testNotifications = async () => {
+    try {
+      if (prefs && !prefs.desktopNotifications) setPrefs(await api.saveSettings({ ...prefs, desktopNotifications: true }));
+      await api.testNotification();
+      toast("Sent a test notification. Didn't see it? Check your computer's notification settings.");
+    } catch (err) {
+      toast((err as Error).message);
+    }
   };
 
   const logout = async () => {
@@ -146,7 +139,7 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
         scanning={scanning}
         sourceCount={enabled.length}
         hasCv={Boolean(cv)}
-        notificationsOn={notificationsOn}
+        notificationsOn={Boolean(prefs?.desktopNotifications)}
         onScan={() => void scan()}
         onAdd={() => setDialog('add')}
         onCv={() => setDialog('cv')}
@@ -154,7 +147,7 @@ export function Dashboard({ onLogout }: { onLogout: () => void }) {
           void refresh();
           setDialog('settings');
         }}
-        onNotifications={() => void enableNotifications()}
+        onNotifications={() => void testNotifications()}
         onLogout={() => void logout()}
       />
       <StatsBar fresh={fresh} board={board} now={now} />

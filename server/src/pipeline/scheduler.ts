@@ -2,7 +2,7 @@ import { getRun, saveRun } from '../db/source-runs.js';
 import { getPreferences } from '../db/settings.js';
 import { setStatus, staleApplications, getJob } from '../db/jobs.js';
 import { broadcast } from '../events.js';
-import { pushNotification } from '../notify.js';
+import { notifyNewJobs } from '../notify.js';
 import { sources } from '../sources/index.js';
 import type { Source } from '../sources/types.js';
 import { toPublicJob } from '../routes/serialize.js';
@@ -47,7 +47,7 @@ export async function runSource(source: Source) {
       withdrawn.forEach((job) => broadcast('job', toPublicJob(job)));
       if (added.length) {
         broadcast('jobs', { jobs: added.map(toPublicJob), quiet: isFirstRun });
-        if (!isFirstRun) await pushNotification(added);
+        if (!isFirstRun) await notifyNewJobs(added, getPreferences().desktopNotifications);
       }
     }
     run.lastSuccessAt = Date.now();

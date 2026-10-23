@@ -24,4 +24,5 @@ export const defaultPreferences: Preferences = {
   blockedKeywords: ['sales', 'account executive', 'recruiter', 'recruitment', 'human resources', 'marketing', 'accounting', 'nurse', 'warehouse', 'driver'],
   blockedCompanies: [],
   ghostAfterDays: 30,
+  desktopNotifications: true,
 };

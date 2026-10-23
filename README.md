@@ -6,10 +6,12 @@ It runs on my own laptop in the background. Right now it's tuned for **Summer 20
 
 ## Features
 
-- **Fresh finds column**: new postings show up live (Server-Sent Events) the moment a scan finds them, sorted by posting date, with desktop and phone notifications.
+- **Fresh finds column**: new postings show up live (Server-Sent Events) the moment a scan finds them, sorted by posting date.
+- **Desktop notifications**: native Windows, macOS and Linux notifications sent by the background service, so they show up even when the site is closed. Optional phone notifications through ntfy.
 - **Strict filtering**: location (Montréal and nearby cities), term (Summer 2027, also detected in French: *été 2027*, *mai à août 2027*), length (drops 8, 12 and 16 month terms), level (no PhD/Master's-only or senior roles) and tech relevance.
 - **Match score**: upload a CV (PDF, DOCX or TXT) and every posting gets a score with the overlapping skills, missing skills, French requirements and more. It runs entirely on the server, so the CV never leaves the app.
 - **Application board**: drag cards between *Will apply*, *Applied*, *Rejected*, *Accepted* and *Ghosted*.
+- **Board search**: press `/` to find any application by company, title or notes, then drag it where it belongs.
 - **Auto-ghosting**: anything sitting in *Applied* for 30 days (configurable) moves to *Ghosted* on its own. Cards in other columns are never touched.
 - **Notes and timeline** for each application, plus a manual "Add a job" for things found on Discord or Slack.
 - **Private by design**: password login, signed http-only session cookie, `noindex` headers, and everything is stored in one SQLite file.
