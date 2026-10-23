@@ -68,7 +68,8 @@ npm run setup
 
 | Command | What it does |
 | --- | --- |
-| `npm run setup` | install or update (run it again after `git pull`) |
+| `npm run setup` | first install |
+| `npm run update` | download the latest code and rebuild, keeping all your data |
 | `npm run restart` | restart the background service |
 | `npm run uninstall` | stop it from starting automatically (your data stays in `data/`) |
 

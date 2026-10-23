@@ -62,6 +62,7 @@ function stopRunningServer() {
   if (!fs.existsSync(pidFile)) return;
   try {
     process.kill(Number(fs.readFileSync(pidFile, 'utf8')));
+    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1500);
   } catch {
     return;
   }
@@ -178,11 +179,16 @@ function checkSqlite() {
   if (result.status !== 0) run('npm rebuild better-sqlite3');
 }
 
-if (action === 'install') {
+if (action === 'update') {
+  run('git checkout -- package-lock.json');
+  run('git pull --ff-only');
+  run('node scripts/service.mjs install');
+} else if (action === 'install') {
   const env = await ensureEnv();
   fs.mkdirSync(logDir(), { recursive: true });
   console.log('\nInstalling dependencies and building…\n');
-  run('npm install');
+  if (platform === 'win32') stopRunningServer();
+  run('npm ci');
   checkSqlite();
   run('npm run build');
   service.install();
@@ -203,5 +209,5 @@ if (action === 'install') {
   service.uninstall();
   console.log(`InternshipSearcher no longer starts automatically. Your data is still in ${dataDir()}`);
 } else {
-  console.log('Usage: node scripts/service.mjs <install|restart|uninstall>');
+  console.log('Usage: node scripts/service.mjs <install|update|restart|uninstall>');
 }
