@@ -57,15 +57,19 @@ async function ensureEnv() {
   return readEnv();
 }
 
+const pause = (ms) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
+
 function stopRunningServer() {
   const pidFile = path.join(dataDir(), 'server.pid');
-  if (!fs.existsSync(pidFile)) return;
   try {
     process.kill(Number(fs.readFileSync(pidFile, 'utf8')));
-    Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 1500);
-  } catch {
-    return;
+  } catch {}
+  if (platform === 'win32') {
+    const target = entry.replace(/'/g, "''");
+    const script = `Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.CommandLine -and $_.CommandLine.Contains('${target}') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`;
+    quiet('powershell', ['-NoProfile', '-EncodedCommand', Buffer.from(script, 'utf16le').toString('base64')]);
   }
+  pause(1500);
 }
 
 const mac = {
@@ -188,7 +192,7 @@ if (action === 'update') {
   fs.mkdirSync(logDir(), { recursive: true });
   console.log('\nInstalling dependencies and building…\n');
   if (platform === 'win32') stopRunningServer();
-  run('npm ci');
+  run('npm install --no-save');
   checkSqlite();
   run('npm run build');
   service.install();
